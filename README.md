@@ -7,11 +7,11 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 > Stable release 1.0
   - lib:CreateGui function
-    -use: lib:CreateGui((optional)<string> gui name)
-    -returns: New Gui with name {gui name} or default name 'GUI'
+    - use: lib:CreateGui((optional)<string> gui name)
+    - returns: New Gui with name {gui name} or default name 'GUI'
   - Gui:CreateSection function
-    -use: Gui:CreateSection((optional)<string> section name)
-    -returns: New Section with name {section name} or default name 'section'  
+    - use: Gui:CreateSection((optional)<string> section name)
+    - returns: New Section with name {section name} or default name 'section'  
   - Dragging of Sections
   - Section:TextButton function
     - use: Section:TextButton((optional)<string> button name, (optional)<function> click callback aka function called when button is clicked)
