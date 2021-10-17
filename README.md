@@ -11,6 +11,6 @@ If you want to suggest anything or if you have any questions, you can contact me
 - Creations of GUI's which contain Sections.
 - Creation of Section's which contain Objects.
 - Creations of Objects
- - List of objects: 
+  - List of objects: 
     - TextLabel
     - TextButton
