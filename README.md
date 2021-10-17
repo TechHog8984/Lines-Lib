@@ -8,8 +8,7 @@ If you want to suggest anything or if you have any questions, you can contact me
 > V1.0
   > Stable release 1.0. Current features are:
     > Creating of guis which contain sections
-    > Creating of sections which contain objects
-    > 
-    >Objects
-     > TextLabel
-     > TextButton
+  > Creating of sections which contain objects 
+  > Objects
+  > TextLabel
+  > TextButton
