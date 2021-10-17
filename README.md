@@ -18,7 +18,7 @@ If you want to suggest anything or if you have any questions, you can contact me
     - returns: New TextButton with name {button name} or default name 'button'. When this button is clicked, if click callback is provided, the click callback is ran
   - Section:TextLabel function
     - use: Section:TextLabel((optional)\<string\> label name, (optional)\<string\> text)
-    - returns: New TextLabel with name {label name} or default name 'label' and text {text} or default text {label name} or default name 'label'
+    - returns: New TextLabel with name {label name} or default name 'label' and text {text} or default text ({label name} or default name 'label')
   - > (COMING SOON) TextBox
   - Hovering detection for all Objects
   - click event for TextButtons
