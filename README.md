@@ -19,11 +19,8 @@ If you want to suggest anything or if you have any questions, you can contact me
   - Section:TextLabel function
     - use: Section:TextLabel((optional)\<string\> label name, (optional)\<string\> text)
     - returns: New TextLabel with name {label name} or default name 'label' and text {text} or default text ({label name} or default name 'label')
-  <!-- - > (COMING SOON) TextBox> -->
   - Hovering detection for all Objects
   - click event for TextButtons
-  <!-- - selected event for (COMING SOON) TextBoxes > -->
-  <!-- unselected event for (COMING SOON) TextBoxes > -->
   - hoverenter and hoverleave events for all Objects
 
 > Stable release 1.1
