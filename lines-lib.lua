@@ -1,4 +1,4 @@
-assert(Drawing, 'This ui is based solely on the Drawing library. You do not have this library, so this script will not function at all. Use an exploit like Synapse X.')
+assert(Drawing, 'This ui is based solely on the Drawing library. You do not have this library, so this script will not function at all. Use an exploit like Synapse X, Sentinel, or Protosmasher.')
 
 local events = loadstring(game:HttpGet('https://pastebin.com/raw/3YaYx4gi'))()
 
@@ -789,4 +789,4 @@ end
 
 print'Thanks for using Lines Lib! Lines Lib was developed by me, TechHog.\nYou can find my github at https://github.com/TechHog8984 and my discord at.\nIf you have any questions or suggestions or if you just want to contact me for any reason, my discord is TechHog#8984 (402264559509045258).'
 
-return gui
+return lib
