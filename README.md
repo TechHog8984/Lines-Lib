@@ -7,7 +7,7 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 > Stable release 1.0
   - lib:CreateGui function
-    - use: lib:CreateGui((optional)<string> gui name)
+    - use: lib:CreateGui((optional)<<string>> gui name)
     - returns: New Gui with name {gui name} or default name 'GUI'
   - Gui:CreateSection function
     - use: Gui:CreateSection((optional)<string> section name)
