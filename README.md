@@ -5,8 +5,7 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 ### __Changelog__
 
-> V1.0
-> Stable release 1.0
+> Stable release 1.0 \n
 > Features are: 
 - Creation of GUI's which contain Sections.
 - Creation of Section's which contain Objects.
