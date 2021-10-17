@@ -5,12 +5,12 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 ### __Changelog__
 
-> Stable release 1.0 \n
-> Features are: 
-- Creation of GUI's which contain Sections.
-- Creation of Section's which contain Objects.
-- Creation of Objects
-  - List of objects: 
-    - TextLabel
-    - TextButton
-    - (COMING SOON) TextBox
+> Stable release 1.0
+- Features: 
+  - Creation of GUI's which contain Sections.
+  - Creation of Section's which contain Objects.
+  - Creation of Objects
+    - List of objects: 
+      - TextLabel
+      - TextButton
+      - (COMING SOON) TextBox
