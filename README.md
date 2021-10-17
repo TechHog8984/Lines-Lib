@@ -25,3 +25,6 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 > Stable release 1.1
   - SetProperty and GetProperty functions for all objects
+
+> BugFix release 1.1.1
+  - Fixed bug where closing one section breaks all others
