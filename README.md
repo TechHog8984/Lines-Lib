@@ -8,7 +8,13 @@ If you want to suggest anything or if you have any questions, you can contact me
 > Stable release 1.0
   - Creation of GUI's which contain Sections.
   - Creation of Section's which contain Objects.
+  - Dragging of Sections
   - Creation of Objects
   - Added object TextLabel
   - Added object TextButton
   - > (COMING SOON) TextBox
+  - Hovering detection for all Objects
+  - click event for TextButtons
+  - selected event for (COMING SOON) TextBoxes
+  - unselected event for (COMING SOON) TextBoxes
+  - hoverenter and hoverleave events for all Objects
