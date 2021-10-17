@@ -9,7 +9,7 @@ If you want to suggest anything or if you have any questions, you can contact me
   > Stable release 1.0. Current features are:
     > Creating of guis which contain sections
     > Creating of sections which contain objects
-    
-    ** Objects
-      > TextLabel
-      > TextButton
+    > 
+    >Objects
+     > TextLabel
+     > TextButton
