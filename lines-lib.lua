@@ -5,6 +5,7 @@ local events = loadstring(game:HttpGet('https://pastebin.com/raw/3YaYx4gi'))()
 local player = game:GetService'Players'.LocalPlayer
 local mouse = player:GetMouse()
 local camera = workspace.CurrentCamera
+local UIS = game:GetService'UserInputService'
 
 local middle = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 local topleft = Vector2.new(camera.ViewportSize.X / 6 - 100, camera.ViewportSize.Y / 6 + 65)
@@ -216,7 +217,7 @@ function lib:CreateGui(guiname)
                     end
                     index = index:sub(5, #index)
                     local success, objectTextValue, objectTextObjectValue = pcall(function()return object.text[index], object.text.object[index] end)
-                    if success and (objectTextValue ~= nil or objectTextObjectValue ~= nil) then
+                    if success then
                         if objectTextValue ~= nil then
                             return object.text[index]
                         elseif objectTextObjectValue ~= nil then
@@ -226,12 +227,12 @@ function lib:CreateGui(guiname)
                 elseif index:sub(1, 10) == 'Background' then
                     index = index:sub(11, #index)
                     local success, objectObjectValue = pcall(function()return object.object[index] end)
-                    if success and objectObjectValue ~= nil then
+                    if success then
                         return object.object[index]
                     end
                 else
                     local success, objectValue, objectObjectValue = pcall(function()return object[index], object.object[index] end)
-                    if success and (objectValue ~= nil or objectObjectValue ~= nil) then
+                    if success then
                         if objectValue ~= nil then
                             return object[index]
                         elseif objectObjectValue ~= nil then
@@ -251,7 +252,7 @@ function lib:CreateGui(guiname)
                     end
                     index = index:sub(5, #index)
                     local success, objectTextValue, objectTextObjectValue = pcall(function()return object.text[index], object.text.object[index] end)
-                    if success and (objectTextValue ~= nil or objectTextObjectValue ~= nil) then
+                    if success then
                         if objectTextValue ~= nil then
                             object.text[index] = value
                             return
@@ -263,13 +264,13 @@ function lib:CreateGui(guiname)
                 elseif index:sub(1, 10) == 'Background' then
                     index = index:sub(11, #index)
                     local success, objectObjectValue = pcall(function()return object.object[index] end)
-                    if success and objectObjectValue ~= nil then
+                    if success then
                         object.object[index] = value
                         return
                     end
                 else
                     local success, objectValue, objectObjectValue = pcall(function()return object[index], object.object[index] end)
-                    if success and (objectValue ~= nil or objectObjectValue ~= nil) then
+                    if success then
                         if objectValue ~= nil then
                             object[index] = value
                             return
@@ -718,6 +719,8 @@ function lib:CreateGui(guiname)
         closebutton.events.click:Connect(function()
             for i, object in pairs(addedobjects) do 
                 if object and object.exists == true and object.object then
+                    table.remove(objects, table.find(objects, object))
+
                     if object == lookingat then
                         lookingat = nil
                     end
@@ -729,7 +732,6 @@ function lib:CreateGui(guiname)
                     object.exists = false
                     object.object:Remove()
                     object = nil
-                    table.remove(objects, table.find(objects, object))
                 end
             end
             addedobjects = {}
@@ -804,11 +806,11 @@ function lib:CreateGui(guiname)
         table.insert(objects, minimizebuttonText)
 
         table.insert(addedobjects, frame)
-        table.insert(sections, frame)
         table.insert(gui.descendants, frame)
         table.insert(topbar.children, frame)
         table.insert(topbar.descendants, frame)
         table.insert(objects, frame)
+        table.insert(sections, frame)
 
         return frame
     end
@@ -872,11 +874,31 @@ function lib:CreateGui(guiname)
         oldmousepos = mousepos
     end))
 
+    table.insert(connections, UIS.InputBegan:connect(function(Input)
+        local key = tostring(Input.KeyCode):gsub('Enum.KeyCode.', '')
+        if selectedtextbox and selectedtextbox.exists == true then
+            local success, text = pcall(function()return selectedtextbox.text end)
+            if success and text and text.exists == true and text.object then
+                if key == 'Backspace' then
+                    text.object.Text = text.object.Text:sub(1, #text.object.Text - 2)
+                end
+                local success, changedevent = pcall(function()return selectedtextbox.events.changed end)
+                if success and changedevent then
+                    changedevent:Fire('Text', text.object.Text)
+                end
+            end
+        end
+    end))
+
     table.insert(connections, mouse.KeyDown:connect(function(keypressed)
         if selectedtextbox and selectedtextbox.exists == true then
             local success, text = pcall(function()return selectedtextbox.text end)
             if success and text and text.exists == true and text.object then
                 text.object.Text = text.object.Text .. keypressed
+                local success, changedevent = pcall(function()return selectedtextbox.events.changed end)
+                if success and changedevent then
+                    changedevent:Fire('Text', text.object.Text)
+                end
             end
         end
     end))
