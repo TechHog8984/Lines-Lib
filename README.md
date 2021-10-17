@@ -8,9 +8,10 @@ If you want to suggest anything or if you have any questions, you can contact me
 > V1.0
 > Stable release 1.0
 > Features are: 
-- Creations of GUI's which contain Sections.
+- Creation of GUI's which contain Sections.
 - Creation of Section's which contain Objects.
-- Creations of Objects
+- Creation of Objects
   - List of objects: 
     - TextLabel
     - TextButton
+    - (COMING SOON) TextBox
