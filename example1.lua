@@ -1,6 +1,6 @@
 local lib = require('lines-lib') --here you should do something like loadstring(game:HttpGet('url'))();
-								                 --url being the raw url to the lines-lib file 
-								                 --(go back to the repo page, click lines-lib.lua, and then click raw)
+				 --url being the raw url to the lines-lib file 
+				 --(go back to the repo page, click lines-lib.lua, and then click raw)
 
 
 local gui = lib:CreateGui('Awesome GUI')
