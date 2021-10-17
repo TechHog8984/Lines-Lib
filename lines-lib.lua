@@ -98,6 +98,7 @@ function lib:CreateGui(guiname)
             draggable = false,
 
         }
+        topbar.text = topbarText
 
         local closebutton = {
             object = Drawing.new'Square',
@@ -138,6 +139,8 @@ function lib:CreateGui(guiname)
             draggable = false,
 
         }
+        closebutton.text = closebuttonText
+
 
         local minimizebutton = {
             object = Drawing.new'Square',
@@ -178,6 +181,7 @@ function lib:CreateGui(guiname)
             draggable = false,
 
         }
+        minimizebutton.text = minimizebuttonText
 
         local frame = {
             object = Drawing.new'Square',
@@ -204,6 +208,81 @@ function lib:CreateGui(guiname)
             return frame.descendants
         end
 
+        local function objectGetProperty(object, index, value)
+            if index then
+                if index:sub(1, 4) == 'Text' then
+                    if index == 'Text' then
+                        return object.text.object.Text
+                    end
+                    index = index:sub(5, #index)
+                    local success, objectTextValue, objectTextObjectValue = pcall(function()return object.text[index], object.text.object[index] end)
+                    if success and (objectTextValue ~= nil or objectTextObjectValue ~= nil) then
+                        if objectTextValue ~= nil then
+                            return object.text[index]
+                        elseif objectTextObjectValue ~= nil then
+                            return object.text.object[index]
+                        end
+                    end
+                elseif index:sub(1, 10) == 'Background' then
+                    index = index:sub(11, #index)
+                    local success, objectObjectValue = pcall(function()return object.object[index] end)
+                    if success and objectObjectValue ~= nil then
+                        return object.object[index]
+                    end
+                else
+                    local success, objectValue, objectObjectValue = pcall(function()return object[index], object.object[index] end)
+                    if success and (objectValue ~= nil or objectObjectValue ~= nil) then
+                        if objectValue ~= nil then
+                            return object[index]
+                        elseif objectObjectValue ~= nil then
+                            return object.object[index]
+                        end
+                    end
+                end
+            end
+            return nil
+        end
+        local function objectSetProperty(object, index, value)
+            if index then
+                if index:sub(1, 4) == 'Text' then
+                    if index == 'Text' then
+                        object.text.object.Text = value
+                        return
+                    end
+                    index = index:sub(5, #index)
+                    local success, objectTextValue, objectTextObjectValue = pcall(function()return object.text[index], object.text.object[index] end)
+                    if success and (objectTextValue ~= nil or objectTextObjectValue ~= nil) then
+                        if objectTextValue ~= nil then
+                            object.text[index] = value
+                            return
+                        elseif objectTextObjectValue ~= nil then
+                            object.text.object[index] = value
+                            return
+                        end
+                    end
+                elseif index:sub(1, 10) == 'Background' then
+                    index = index:sub(11, #index)
+                    local success, objectObjectValue = pcall(function()return object.object[index] end)
+                    if success and objectObjectValue ~= nil then
+                        object.object[index] = value
+                        return
+                    end
+                else
+                    local success, objectValue, objectObjectValue = pcall(function()return object[index], object.object[index] end)
+                    if success and (objectValue ~= nil or objectObjectValue ~= nil) then
+                        if objectValue ~= nil then
+                            object[index] = value
+                            return
+                        elseif objectObjectValue ~= nil then
+                            object.object[index] = value
+                            return
+                        end
+                    end
+                end
+            end
+            return nil
+        end
+
         function frame:TextButton(objectName, clickcallback)
             local button = {
                 object = Drawing.new'Square',
@@ -224,6 +303,7 @@ function lib:CreateGui(guiname)
                     hoverenter = events:CreateEvent((objectName or 'button') .. '-hover_enter'),
                     hoverleave = events:CreateEvent((objectName or 'button') .. '-hover_leave'),
                     click = events:CreateEvent((objectName or 'button') .. '-click'),
+                    changed = events:CreateEvent((objectName or 'button') .. '-changed'),
 
                 },
 
@@ -246,6 +326,7 @@ function lib:CreateGui(guiname)
                 events = button.events,
 
             }
+            button.text = text
 
             local button_object = button.object
             button_object.Visible = true
@@ -281,6 +362,23 @@ function lib:CreateGui(guiname)
                 button.events.click:Connect(clickcallback)
             end
 
+            function button:GetEvent(index)
+                if index then
+                    local result, event = pcall(function()return button.events[index] end)
+                    if result and event then
+                        return event
+                    end
+                    return nil
+                end
+            end
+
+            function button:GetProperty(index, value)
+                return objectGetProperty(button, index, value)
+            end
+            function button:SetProperty(index, value)
+                return objectSetProperty(button, index, value)
+            end
+
             table.insert(addedobjects, button)
             table.insert(frame.children, button)
             table.insert(frame.descendants, button)
@@ -296,10 +394,39 @@ function lib:CreateGui(guiname)
             table.insert(gui.descendants, text)
             table.insert(objects, text)
 
-            return button
+            
+            -- this is for indexing properties without the GetProperty method 
+            local fake = {}
+            setmetatable(fake, {
+                __index = function(self, index)
+                    if index then
+                        if index:sub(1, 4) == 'Text' then
+                            local success, selfTextValue, selfTextObjectValue = pcall(function()return button.text[index], button.text.object[index] end)
+                            if success and (selfTextValue or selfTextObjectValue) then
+                                if selfTextValue then
+                                    return button.text[index]
+                                elseif selfTextObjectValue then
+                                    return button.text.object[index]
+                                end
+                            end
+                        else
+                            local success, selfValue, selfObjectValue = pcall(function()return button[index] or button.object[index] end)
+                            if success and (selfValue or selfObjectValue) then
+                                if selfValue then
+                                    return button[index]
+                                elseif selfObjectValue then
+                                    return button.object[index]
+                                end
+                            end
+                        end
+                    end
+                end
+            })
+
+            return fake
         end
 
-        function frame:TextLabel(objectName)
+        function frame:TextLabel(objectName, objectText)
             local label = {
                 object = Drawing.new'Square',
 
@@ -318,6 +445,7 @@ function lib:CreateGui(guiname)
                 events = {
                     hoverenter = events:CreateEvent((objectName or 'label') .. '-hover_enter'),
                     hoverleave = events:CreateEvent((objectName or 'label') .. '-hover_leave'),
+                    changed = events:CreateEvent((objectName or 'label') .. '-changed'),
 
                 },
 
@@ -340,6 +468,7 @@ function lib:CreateGui(guiname)
                 events = label.events,
 
             }
+            label.text = text
 
             local label_object = label.object
             label_object.Visible = true
@@ -358,12 +487,28 @@ function lib:CreateGui(guiname)
             local text_object = text.object
             text_object.Visible = true
             text_object.Color = Color3.new(1, 1, 1)
-            text_object.Text = text.name
+            text_object.Text = objectText or text.name
             text_object.ZIndex = 3
             text_object.Size = 18
             text_object.Center = true
             text_object.Position = Vector2.new(label_object.Position.X + (label_object.Size.X / 2), label_object.Position.Y + text_object.Size)
             text_object.Font = 3
+
+            function label:GetEvent(index)
+                if index then
+                    local result, event = pcall(function()return label.events[index] end)
+                    if result and event then
+                        return event
+                    end
+                    return nil
+                end
+            end
+            function label:GetProperty(index, value)
+                return objectGetProperty(label, index, value)
+            end
+            function label:SetProperty(index, value)
+                return objectSetProperty(label, index, value)
+            end
 
             table.insert(addedobjects, label)
             table.insert(frame.children, label)
@@ -405,6 +550,7 @@ function lib:CreateGui(guiname)
                     hoverleave = events:CreateEvent((objectName or 'textbox') .. '-hover_leave'),
                     selected = events:CreateEvent((objectName or 'textbox') .. '-selected'),
                     unselected = events:CreateEvent((objectName or 'textbox') .. '-unselected'),
+                    changed = events:CreateEvent((objectName or 'textbox') .. '-changed'),
 
                 },
 
@@ -427,6 +573,7 @@ function lib:CreateGui(guiname)
                 events = textbox.events,
 
             }
+            textbox.text = text
 
             local textbox_object = textbox.object
             textbox_object.Visible = true
@@ -458,6 +605,22 @@ function lib:CreateGui(guiname)
             textbox.events.unselected:Connect(function()
                 text_object.Color = Color3.new(1, 1, 1)
             end)
+
+            function textbox:GetEvent(index)
+                if index then
+                    local result, event = pcall(function()return textbox.events[index] end)
+                    if result and event then
+                        return event
+                    end
+                    return nil
+                end
+            end
+            function textbox:GetProperty(index, value)
+                return objectGetProperty(textbox, index, value)
+            end
+            function textbox:SetProperty(index, value)
+                return objectSetProperty(textbox, index, value)
+            end
 
             table.insert(addedobjects, textbox)
             table.insert(frame.children, textbox)
@@ -787,6 +950,6 @@ function lib:CreateGui(guiname)
     return gui
 end
 
-print'Thanks for using Lines Lib! Lines Lib was developed by me, TechHog.\nYou can find my github at https://github.com/TechHog8984 and my discord at.\nIf you have any questions or suggestions or if you just want to contact me for any reason, my discord is TechHog#8984 (402264559509045258).'
+print'Thanks for using Lines Lib - TechHog'
 
 return lib
