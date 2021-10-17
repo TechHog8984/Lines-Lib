@@ -10,11 +10,11 @@ If you want to suggest anything or if you have any questions, you can contact me
     - use: lib:CreateGui((optional)\<string\> gui name)
     - returns: New Gui with name {gui name} or default name 'GUI'
   - Gui:CreateSection function
-    - use: Gui:CreateSection((optional)<\string\> section name)
+    - use: Gui:CreateSection((optional)\<string\> section name)
     - returns: New Section with name {section name} or default name 'section'  
   - Dragging of Sections
   - Section:TextButton function
-    - use: Section:TextButton((optional)\<string\> button name, (optional)<\function\> click callback aka function called when button is clicked)
+    - use: Section:TextButton((optional)\<string\> button name, (optional)\<function\> click callback aka function called when button is clicked)
     - returns: New TextButton with name {button name} or default name 'button'. When this button is clicked, if click callback is provided, the click callback is ran
   - Section:TextLabel function
     - use: Section:TextLabel((optional)\<string\> label name, (optional)\<string\> text)
