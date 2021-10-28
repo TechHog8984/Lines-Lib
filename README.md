@@ -28,3 +28,10 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 > BugFix release 1.1.1
   - Fixed bug where closing one section breaks all others
+
+> Stable release 1.2
+  - Section:TextBox function
+    - use: Section:TextButton((optional)\<string\> box name, (optional)\<string\> placeholdertext)
+    - returns: New TextButton with name {box name} or default name 'box' and placeholdertext {placeholdertext} or default text ({box name} or defualt name 'box')
+    - current bugs: use of any key such as "space", "/", or "o" which has a function like jumping or opening chat will still trigger when editing the textbox
+    - :warning: note :warning: : there is no selecting text nor holding of key support. this means you cannot hold a key down (such as "backspace" or "a") and have that key function multiple times
