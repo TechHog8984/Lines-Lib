@@ -1,4 +1,4 @@
-assert(Drawing, 'This ui is based solely on the Drawing library. You do not have this library, so this script will not function at all. Use an exploit like Synapse X, Sentinel, or Protosmasher.')
+local Drawing = assert(Drawing or drawing, 'This ui is based solely on the Drawing API. I am unable to find the Drawing API, so this script will not function at all. Use an exploit like Synapse X, Sentinel, or Protosmasher.')
 
 local events = loadstring(game:HttpGet('https://pastebin.com/raw/3YaYx4gi'))()
 
@@ -15,6 +15,37 @@ local rightclicking = false
 local oldmousepos = nil
 
 local lib = {}
+
+local function upper(str)
+    local list = {
+        ['`'] = '~',
+        ['1'] = '!',
+        ['2'] = '@',
+        ['3'] = '#',
+        ['4'] = '$',
+        ['5'] = '%',
+        ['6'] = '^',
+        ['7'] = '&',
+        ['8'] = '*',
+        ['9'] = '(',
+        ['0'] = ')',
+        ['-'] = '_',
+        ['='] = '+',
+
+        ['['] = '{',
+        [']'] = '}',
+        ['\\'] = '|',
+
+        [';'] = ':',
+        ['\''] = '"',
+
+        [','] = '<',
+        ['.'] = '>',
+        ['/'] = '?',
+    }
+
+    return list[str] or str:upper()
+end
 
 function lib:CreateGui(guiname)
     local guiname = guiname or 'GUI'
@@ -555,6 +586,9 @@ function lib:CreateGui(guiname)
 
                 },
 
+                placeholdertext = placeholdertext or nil,
+                isplaceholdertext = true,
+
             }
             local text = {
                 object = Drawing.new'Text',
@@ -593,7 +627,7 @@ function lib:CreateGui(guiname)
             local text_object = text.object
             text_object.Visible = true
             text_object.Color = Color3.new(1, 1, 1)
-            text_object.Text = text.name
+            text_object.Text = placeholdertext or text.name
             text_object.ZIndex = 3
             text_object.Size = 18
             text_object.Center = true
@@ -874,34 +908,6 @@ function lib:CreateGui(guiname)
         oldmousepos = mousepos
     end))
 
-    table.insert(connections, UIS.InputBegan:connect(function(Input)
-        local key = tostring(Input.KeyCode):gsub('Enum.KeyCode.', '')
-        if selectedtextbox and selectedtextbox.exists == true then
-            local success, text = pcall(function()return selectedtextbox.text end)
-            if success and text and text.exists == true and text.object then
-                if key == 'Backspace' then
-                    text.object.Text = text.object.Text:sub(1, #text.object.Text - 2)
-                end
-                local success, changedevent = pcall(function()return selectedtextbox.events.changed end)
-                if success and changedevent then
-                    changedevent:Fire('Text', text.object.Text)
-                end
-            end
-        end
-    end))
-
-    table.insert(connections, mouse.KeyDown:connect(function(keypressed)
-        if selectedtextbox and selectedtextbox.exists == true then
-            local success, text = pcall(function()return selectedtextbox.text end)
-            if success and text and text.exists == true and text.object then
-                text.object.Text = text.object.Text .. keypressed
-                local success, changedevent = pcall(function()return selectedtextbox.events.changed end)
-                if success and changedevent then
-                    changedevent:Fire('Text', text.object.Text)
-                end
-            end
-        end
-    end))
 
     table.insert(connections, mouse.Button1Down:connect(function()
         leftclicking = true
@@ -952,6 +958,8 @@ function lib:CreateGui(guiname)
             selectedtextbox = nil
         end
     end))
+
+
     table.insert(connections, mouse.Button1Up:connect(function()
         leftclicking = false
         for i, object in pairs(objects) do
@@ -967,6 +975,50 @@ function lib:CreateGui(guiname)
 
     table.insert(connections, mouse.Button2Up:connect(function()
         rightclicking = false
+    end))
+
+    table.insert(connections, UIS.InputBegan:connect(function(Input)
+        if selectedtextbox and selectedtextbox.exists == true then
+            local success, text = pcall(function()return selectedtextbox.text end)
+            if success and text and text.exists == true and text.object then
+                local textchanged = false
+
+                local comb = tostring(Input.KeyCode):gsub('Enum.KeyCode.', '')
+                local key = UIS:GetStringForKeyCode(Input.KeyCode):lower()
+
+                if key and #key > 0 then
+                    if UIS:IsKeyDown(Enum.KeyCode.LeftShift) then
+                        key = upper(key)
+                    end
+
+                    text.object.Text = text.object.Text .. key
+
+                    textchanged = true
+                elseif comb == 'Backspace' and selectedtextbox.isplaceholdertext == false then
+                    if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+                        text.object.Text = ''
+                    else
+                        text.object.Text = text.object.Text:sub(1, #text.object.Text - 1)
+                    end
+
+                    textchanged = true
+                end
+
+                if textchanged then
+                    if selectedtextbox.isplaceholdertext == true then
+                        selectedtextbox.isplaceholdertext = false
+                        text.object.Text = text.object.Text:sub((#selectedtextbox.placeholdertext + 1 or ''), #text.object.Text)
+                    elseif text.object.Text == '' then
+                        selectedtextbox.isplaceholdertext = true
+                        text.object.Text = selectedtextbox.placeholdertext or ''
+                    end
+                    local success, changedevent = pcall(function()return selectedtextbox.events.changed end)
+                    if success and changedevent then
+                        changedevent:Fire('Text', text.object.Text)
+                    end
+                end
+            end
+        end
     end))
 
     return gui
