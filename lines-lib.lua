@@ -68,6 +68,7 @@ function lib:CreateGui(guiname)
     local sections = {}
 
     local lookingat = nil
+    local dragging = nil
     local selectedtextbox = nil
 
     local cursor = {
@@ -894,16 +895,24 @@ function lib:CreateGui(guiname)
                 cursor.object.Position = Vector2.new(mousepos.X, mousepos.Y + 35)
                 cursor.object.Visible = true
             end
-            if lookingat.dragging == true and lookingat.object and oldmousepos then
+            --[[if lookingat.dragging == true and lookingat.object and oldmousepos then
                 lookingat.object.Position = Vector2.new(lookingat.object.Position.X + (mousepos.X - oldmousepos.X), lookingat.object.Position.Y + (mousepos.Y - oldmousepos.Y))
                 for i, descendant in pairs(lookingat.descendants) do
                     if descendant and descendant.exists == true and descendant.object then
                         descendant.object.Position = Vector2.new(descendant.object.Position.X + (mousepos.X - oldmousepos.X), descendant.object.Position.Y + (mousepos.Y - oldmousepos.Y))
                     end
                 end
-            end
+            end]]
         elseif cursor and cursor.exists == true and cursor.object then 
             cursor.object.Visible = false
+        end
+        if dragging and dragging.object and oldmousepos then
+            dragging.object.Position = Vector2.new(dragging.object.Position.X + (mousepos.X - oldmousepos.X), dragging.object.Position.Y + (mousepos.Y - oldmousepos.Y))
+            for i, descendant in pairs(dragging.descendants) do
+                if descendant and descendant.exists == true and descendant.object then
+                    descendant.object.Position = Vector2.new(descendant.object.Position.X + (mousepos.X - oldmousepos.X), descendant.object.Position.Y + (mousepos.Y - oldmousepos.Y))
+                end
+            end
         end
         oldmousepos = mousepos
     end))
@@ -944,6 +953,7 @@ function lib:CreateGui(guiname)
             end
             if lookingat.draggable == true then
                 lookingat.dragging = true
+                dragging = lookingat
             end
             local success, clickevent = pcall(function()return lookingat.events.click end)
             if success and clickevent then
@@ -962,11 +972,10 @@ function lib:CreateGui(guiname)
 
     table.insert(connections, mouse.Button1Up:connect(function()
         leftclicking = false
-        for i, object in pairs(objects) do
-            if object and object.exists == true then
-                object.dragging = false
-            end
+        if dragging and dragging.exists == true and dragging.dragging == true then
+            dragging.dragging = false
         end
+        dragging = nil
     end))
 
     table.insert(connections, mouse.Button2Down:connect(function()
@@ -1024,6 +1033,9 @@ function lib:CreateGui(guiname)
     return gui
 end
 
-print'Thanks for using Lines Lib - TechHog'
+if not shared.__lineslib__ then
+    print'Thanks for using Lines Lib - TechHog'
+end
+shared.__lineslib__ = lib
 
 return lib
