@@ -64,6 +64,7 @@ function lib:CreateGui(guiname)
     local mt = {}
 
     local connections = {}
+    local threads = {}
     local objects = {}
     local sections = {}
 
@@ -231,6 +232,9 @@ function lib:CreateGui(guiname)
             dragging = false,
             draggable = false,
             open = true,
+
+            xvelocity = 0,
+            yvelocity = 0,
 
         }
 
@@ -784,6 +788,15 @@ function lib:CreateGui(guiname)
                 for i, connection in pairs(connections) do
                     connection:Disconnect()
                 end
+                for thread, event in pairs(threads) do
+                    if thread and event then
+                        event:Fire()
+                        threads[thread] = nil
+                        thread = nil
+                        event:DisconnectAll()
+                        event = nil
+                    end
+                end
             end
         end)
         minimizebutton.events.click:Connect(function()
@@ -804,6 +817,28 @@ function lib:CreateGui(guiname)
                 end
             end
         end)
+
+        local velocityEvent = events:CreateEvent()
+
+        local velocityThread = coroutine.create(function()
+            local active = true
+            velocityEvent.Event:Connect(function()
+                active = false
+                coroutine.yield()
+            end)
+            while active do
+                wait()
+                if frame and frame.exists == true and frame.object and frame.xvelocity and frame.yvelocity then
+                    frame.xvelocity = frame.xvelocity / 1.3
+                    frame.yvelocity = frame.yvelocity / 1.3
+
+                    frame.object.Position = frame.object.Position + Vector2.new(frame.xvelocity, frame.yvelocity)
+                    print(frame.xvelocity, frame.yvelocity)
+                end
+            end
+        end)
+
+        threads[velocityThread] = velocityEvent
 
         table.insert(addedobjects, topbar)
         table.insert(gui.descendants, topbar)
@@ -857,7 +892,7 @@ function lib:CreateGui(guiname)
         return gui.descendants
     end
 
-    table.insert(connections, mouse.Move:connect(function()
+    local function mousemove()
         local mousepos = Vector2.new(mouse.X, mouse.Y)
 
         for i, object in pairs(objects) do 
@@ -895,19 +930,32 @@ function lib:CreateGui(guiname)
                 cursor.object.Position = Vector2.new(mousepos.X, mousepos.Y + 35)
                 cursor.object.Visible = true
             end
-            --[[if lookingat.dragging == true and lookingat.object and oldmousepos then
-                lookingat.object.Position = Vector2.new(lookingat.object.Position.X + (mousepos.X - oldmousepos.X), lookingat.object.Position.Y + (mousepos.Y - oldmousepos.Y))
-                for i, descendant in pairs(lookingat.descendants) do
-                    if descendant and descendant.exists == true and descendant.object then
-                        descendant.object.Position = Vector2.new(descendant.object.Position.X + (mousepos.X - oldmousepos.X), descendant.object.Position.Y + (mousepos.Y - oldmousepos.Y))
-                    end
-                end
-            end]]
         elseif cursor and cursor.exists == true and cursor.object then 
             cursor.object.Visible = false
         end
         if dragging and dragging.object and oldmousepos then
             dragging.object.Position = Vector2.new(dragging.object.Position.X + (mousepos.X - oldmousepos.X), dragging.object.Position.Y + (mousepos.Y - oldmousepos.Y))
+            
+            local x = dragging.object.Position.X
+            local xDestination = x + (mousepos.X - oldmousepos.X)
+
+            local y = dragging.object.Position.Y
+            local yDestination = y + (mousepos.Y - oldmousepos.Y)
+
+            if dragging.xvelocity and dragging.yvelocity then
+                if x > xDestination then
+                    dragging.xvelocity = dragging.xvelocity - i
+                elseif x < xDestination then
+                    dragging.xvelocity = dragging.xvelocity + i
+                end
+
+                if y > yDestination then
+                    dragging.yvelocity = dragging.yvelocity - i
+                elseif y < yDestination then
+                    dragging.yvelocity = dragging.yvelocity + i
+                end
+            end
+            
             for i, descendant in pairs(dragging.descendants) do
                 if descendant and descendant.exists == true and descendant.object then
                     descendant.object.Position = Vector2.new(descendant.object.Position.X + (mousepos.X - oldmousepos.X), descendant.object.Position.Y + (mousepos.Y - oldmousepos.Y))
@@ -915,10 +963,8 @@ function lib:CreateGui(guiname)
             end
         end
         oldmousepos = mousepos
-    end))
-
-
-    table.insert(connections, mouse.Button1Down:connect(function()
+    end
+    local function button1down()
         leftclicking = true
         if lookingat and lookingat.exists == true then
             if lookingat.classname == 'textbox' then
@@ -967,24 +1013,20 @@ function lib:CreateGui(guiname)
             end
             selectedtextbox = nil
         end
-    end))
-
-
-    table.insert(connections, mouse.Button1Up:connect(function()
+    end
+    local function button1up()
         leftclicking = false
         if dragging and dragging.exists == true and dragging.dragging == true then
             dragging.dragging = false
         end
         dragging = nil
-    end))
-
-    table.insert(connections, mouse.Button2Down:connect(function()
+    end
+    local function button2down()
         rightclicking = true
-    end))
-
-    table.insert(connections, mouse.Button2Up:connect(function()
+    end
+    local function button2up()
         rightclicking = false
-    end))
+    end
 
     table.insert(connections, UIS.InputBegan:connect(function(Input)
         if selectedtextbox and selectedtextbox.exists == true then
@@ -1027,6 +1069,25 @@ function lib:CreateGui(guiname)
                     end
                 end
             end
+        end
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            button1down()
+        elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+            button2down()
+        end
+    end))
+
+    table.insert(connections, UIS.InputEnded:connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            button1up()
+        elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+            button2up()
+        end
+    end))
+
+    table.insert(connections, UIS.InputChanged:connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseMovement then
+            mousemove()
         end
     end))
 
