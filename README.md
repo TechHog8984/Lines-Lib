@@ -35,3 +35,6 @@ If you want to suggest anything or if you have any questions, you can contact me
     - returns: New TextBox with name {box name} or default name 'box' and placeholdertext {placeholdertext} or default text ({box name} or defualt name 'box')
     - :warning: current bugs :warning: : use of any key such as "space", "/", or "o" which has a function like jumping or opening chat will still trigger when editing the textbox. these bugs will hopefully be fixed in a later update.
     - note: there is no selecting text nor holding of key support. this means you cannot hold a key down (such as "backspace" or "a") and have that key function multiple times. support for these features will hopefully be added in a later update.
+
+> Stable release 1.2.1
+  - Dragging sections are now smoother. They used to be very jittery. If you moved your mouse too fast it would stop the dragging. Now the dragging is better and only stops when you let go of the mouse.
