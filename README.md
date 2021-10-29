@@ -38,3 +38,6 @@ If you want to suggest anything or if you have any questions, you can contact me
 
 > Stable release 1.2.1
   - Dragging sections are now smoother. They used to be very jittery. If you moved your mouse too fast it would stop the dragging. Now the dragging is better and only stops when you let go of the mouse.
+
+> Stable release 1.2.2
+  - Converted all user input detection to UserInputService rather than Mouse, greatly improving input detection.
