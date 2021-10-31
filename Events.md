@@ -1,22 +1,22 @@
 ### This is a list of all the Events featured in Lines-Lib.
 
 ## TextButton
-  > hoverenter
-    - description: Fired whenever the mouse starts hovering over the button
-    - parameters / args: None
-    - usage: TextButton:GetEvent('hoverenter'):Connect(callback)
-  > hoverleave
-    - description: Fired whenever the mouse stops hoevering over the button
-    - parameters / args: None
-    - usage: TextButton:GetEvent('hoverleave'):Connect(callback)
-  > click
-    - description: Fired whenever the mouse clicks the button
-    - parameters / args: None
-    - usage: TextButton:GetEvent('click'):Connect(callback)
-  > changed
-    - description: Fired whenever a property of the button is changed
-    - parameters / args: \<string\> name of the property being changed
-    - usage: TextButton:GetEvent('changed'):Connect(callback)
+> hoverenter
+  - description: Fired whenever the mouse starts hovering over the button
+  - parameters / args: None
+  - usage: TextButton:GetEvent('hoverenter'):Connect(callback)
+> hoverleave
+  - description: Fired whenever the mouse stops hoevering over the button
+  - parameters / args: None
+  - usage: TextButton:GetEvent('hoverleave'):Connect(callback)
+> click
+  - description: Fired whenever the mouse clicks the button
+  - parameters / args: None
+  - usage: TextButton:GetEvent('click'):Connect(callback)
+> changed
+  - description: Fired whenever a property of the button is changed
+  - parameters / args: \<string\> name of the property being changed
+  - usage: TextButton:GetEvent('changed'):Connect(callback)
 
 ## TextLabel
   > hoverenter
