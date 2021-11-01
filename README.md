@@ -4,10 +4,10 @@ like Synapse, Sentinel, Protosmasher.
 If you want to suggest anything or if you have any questions, you can contact me through my discord at TechHog#8984 (402264559509045258).
 
 > Changelog
-  [Changelog](Changelog.md)
+  - [Changelog](Changelog.md)
 
 > List of Events
-  [Events](Events.md)
+  - [Events](Events.md)
 
 > Todo list
-  [TodoList](TodoList.md)
+  - [TodoList](TodoList.md)
