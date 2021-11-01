@@ -3,3 +3,4 @@ Lines Lib is a UI library for roblox made mostly using the Drawing API. The Draw
 like Synapse, Sentinel, Protosmasher.
 If you want to suggest anything or if you have any questions, you can contact me through my discord at TechHog#8984 (402264559509045258).
 
+[Changelog](Changelog.md)
