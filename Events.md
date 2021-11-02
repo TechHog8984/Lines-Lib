@@ -6,7 +6,7 @@
   - parameters / args: None
   - usage: TextButton:GetEvent('hoverenter'):Connect(callback)
 > hoverleave
-  - description: Fired whenever the mouse stops hoevering over the button
+  - description: Fired whenever the mouse stops hovering over the button
   - parameters / args: None
   - usage: TextButton:GetEvent('hoverleave'):Connect(callback)
 > click
@@ -24,7 +24,7 @@
   - parameters / args: None
   - usage: TextLabel:GetEvent('hoverenter'):Connect(callback)
 > hoverleave
-  - description: Fired whenever the mouse stops hoevering over the label
+  - description: Fired whenever the mouse stops hovering over the label
   - parameters / args: None
   - usage: TextLabel:GetEvent('hoverleave'):Connect(callback)
 > changed
@@ -38,7 +38,7 @@
   - parameters / args: None
   - usage: TextBox:GetEvent('hoverenter'):Connect(callback)
 > hoverleave
-  - description: Fired whenever the mouse stops hoevering over the box
+  - description: Fired whenever the mouse stops hovering over the box
   - parameters / args: None
   - usage: TextBox:GetEvent('hoverleave'):Connect(callback)
 > selected
