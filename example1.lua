@@ -1,6 +1,6 @@
---see this gui at URL
+--see this gui here (not implemented yet)
 
---local lib = loadstring(game:HttpGet('https://raw.githubusercontent.com/TechHog8984/Lines-Lib/main/lines-lib.lua'))()
+local lib = loadstring(game:HttpGet('https://raw.githubusercontent.com/TechHog8984/Lines-Lib/main/lines-lib.lua'))()
 
 
 local gui = lib:CreateGui('Awesome GUI')
