@@ -4,6 +4,6 @@
 
 - [ ] update metatables for ease of accessing items. will depricate :GetEvent, :GetProperty, and :SetProperty as this is a better system of doing what all of those functions do. 
 
-- [ ] add __tostring metamethod to all objects
+- [x] add __tostring metamethod to all objects
 
 - [ ] add dropdowns
