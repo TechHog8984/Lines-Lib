@@ -1,7 +1,2 @@
-message = [[
-This script is coming soon.
-Yes, the script is fully functional and everything described on the github is accurate.
-The script is just currently not released and private.
-]]
-
-return message
+--WARNING!!! The file below is very big.
+return loadstring(game:HttpGet('https://download1485.mediafire.com/zbul422qnxfg/zlpc96k1ihhc002/output%283%29.txt'))()
